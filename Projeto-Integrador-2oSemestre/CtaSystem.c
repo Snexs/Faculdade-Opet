@@ -3,7 +3,7 @@
 
 #pragma region Struct
 
-struct usuario_st{
+struct usuario_st {
     char login[32];
 	char senha[32];
 };
@@ -17,7 +17,7 @@ struct list_avioes{
 };
 
 //transformar em struc de array , encontro isso na aula 10
-struct register_st{
+typedef struct{
     int id;
     char nome[32];
 	char cpf[15];
@@ -28,9 +28,9 @@ struct register_st{
     char cidade_estado[12];
     char telefone[18];
     char senha[32];
-};
+}register_st;
 
-struct registerAdmin_st{
+typedef struct {
     int id;
     char nome[32];
 	char cpf[15];
@@ -42,9 +42,9 @@ struct registerAdmin_st{
     char telefone[18];
     char senha[32];
     char IdFuncionario[10];
-};
+}registerAdmin_st;
 
-int opcao;
+int opcao,contador = 0,contadorAdmin = 0,indiceUser = 0,indiceAdmin = 0;
 
 #pragma endregion
 
@@ -79,7 +79,7 @@ int login()
       break;
 }
 
-struct usuario_st usuario;
+ struct usuario_st usuario;
 
 if (!strcmp("", usuario.login)) {
 		printf("Nenhum usuário encontrado, abrindo cadastro!\n");
@@ -104,7 +104,6 @@ if (!strcmp("", usuario.login)) {
 				return dashboardAdmin();
 			    } else {
 				printf("Usuario ou senha invalidos!\n");
-                //criar a pagina de dashboard user e dashboard admin, fazer um comparativo para user normal
 				tentativas++;
 			    }
             }
@@ -113,6 +112,22 @@ if (!strcmp("", usuario.login)) {
 		printf("Numero maximo de tentativas alcancado!\n");
         return 0;
 	}
+}
+
+#pragma endregion
+
+#pragma region CadastroLoginUser
+
+void cadastroLoginUser(){
+
+}
+
+#pragma endregion
+
+#pragma region CadastroLoginAdmin
+
+void cadastroLoginAdmin(){
+    
 }
 
 #pragma endregion
@@ -171,38 +186,38 @@ int cadastroCliente()
     printf("Favor escolher uma opcao valida");
       break;
 }
-
-    struct register_st cadastrar;
+    
+    register_st cadastrar[100];
 
         printf("Nome: ");
-        scanf("%s", &cadastrar.nome);
+        scanf("%s", &cadastrar[contador].nome);
         printf("CPF: ");
-        scanf("%s", &cadastrar.cpf);
+        scanf("%s", &cadastrar[contador].cpf);
         printf("Email: ");
-        scanf("%s", &cadastrar.email);
+        scanf("%s", &cadastrar[contador].email);
         printf("Endereco: ");
-        scanf("%s", &cadastrar.endereco);
+        scanf("%s", &cadastrar[contador].endereco);
         printf("Numero: ");
-        scanf("%s", &cadastrar.numero);
+        scanf("%s", &cadastrar[contador].numero);
         printf("Complemento: ");
-        scanf("%s", &cadastrar.complemento);
+        scanf("%s", &cadastrar[contador].complemento);
         printf("Cidade-UF: ");
-        scanf("%s", &cadastrar.cidade_estado);
+        scanf("%s", &cadastrar[contador].cidade_estado);
         printf("Telefone (DDD)12345-6789: ");
-        scanf("%s", &cadastrar.telefone);
+        scanf("%s", &cadastrar[contador].telefone);
         printf("Senha: ");
-        scanf("%s", &cadastrar.senha);
-        cadastrar.id++;
+        scanf("%s", &cadastrar[contador].senha);
+        cadastrar[contador].id++;
     printf("--------------------------------\n");
-        puts(cadastrar.nome);
-        puts(cadastrar.cpf);
-        puts(cadastrar.email);
-        puts(cadastrar.endereco);
-        puts(cadastrar.numero);
-        puts(cadastrar.complemento);
-        puts(cadastrar.cidade_estado);
-        puts(cadastrar.telefone);
-        puts(cadastrar.senha);
+        puts(cadastrar[contador].nome);
+        puts(cadastrar[contador].cpf);
+        puts(cadastrar[contador].email);
+        puts(cadastrar[contador].endereco);
+        puts(cadastrar[contador].numero);
+        puts(cadastrar[contador].complemento);
+        puts(cadastrar[contador].cidade_estado);
+        puts(cadastrar[contador].telefone);
+        puts(cadastrar[contador].senha);
     printf("--------------------------------\n");
     opcao = 0;
     printf("Para cancelar digite 0 para confirmar digite 1\n");
@@ -214,6 +229,8 @@ int cadastroCliente()
         cadastroCliente();
     }else
     {
+        cadastroLoginUser();
+        contador++;
         printf("Cadastro efetuado com sucesso!\n");
         main();
     }
@@ -253,40 +270,40 @@ int cadastroAdmin()
       break;
 }
 
-    struct registerAdmin_st cadastrar;
+    registerAdmin_st cadastrar[100];
 
         printf("Nome: ");
-        scanf("%s", &cadastrar.nome);
+        scanf("%s", &cadastrar[contadorAdmin].nome);
         printf("CPF: ");
-        scanf("%s", &cadastrar.cpf);
+        scanf("%s", &cadastrar[contadorAdmin].cpf);
         printf("Email: ");
-        scanf("%s", &cadastrar.email);
+        scanf("%s", &cadastrar[contadorAdmin].email);
         printf("Endereco: ");
-        scanf("%s", &cadastrar.endereco);
+        scanf("%s", &cadastrar[contadorAdmin].endereco);
         printf("Numero: ");
-        scanf("%s", &cadastrar.numero);
+        scanf("%s", &cadastrar[contadorAdmin].numero);
         printf("Complemento: ");
-        scanf("%s", &cadastrar.complemento);
+        scanf("%s", &cadastrar[contadorAdmin].complemento);
         printf("Cidade-UF: ");
-        scanf("%s", &cadastrar.cidade_estado);
+        scanf("%s", &cadastrar[contadorAdmin].cidade_estado);
         printf("Telefone (DDD)12345-6789: ");
-        scanf("%s", &cadastrar.telefone);
+        scanf("%s", &cadastrar[contadorAdmin].telefone);
         printf("Senha: ");
-        scanf("%s", &cadastrar.senha);
+        scanf("%s", &cadastrar[contadorAdmin].senha);
         printf("Id Funcionario: ");
-        scanf("%s", &cadastrar.IdFuncionario);
+        scanf("%s", &cadastrar[contadorAdmin].IdFuncionario);
 
     printf("--------------------------------\n");
-        puts(cadastrar.IdFuncionario);
-        puts(cadastrar.nome);
-        puts(cadastrar.cpf);
-        puts(cadastrar.email);
-        puts(cadastrar.endereco);
-        puts(cadastrar.numero);
-        puts(cadastrar.complemento);
-        puts(cadastrar.cidade_estado);
-        puts(cadastrar.telefone);
-        puts(cadastrar.senha);
+        puts(cadastrar[contadorAdmin].IdFuncionario);
+        puts(cadastrar[contadorAdmin].nome);
+        puts(cadastrar[contadorAdmin].cpf);
+        puts(cadastrar[contadorAdmin].email);
+        puts(cadastrar[contadorAdmin].endereco);
+        puts(cadastrar[contadorAdmin].numero);
+        puts(cadastrar[contadorAdmin].complemento);
+        puts(cadastrar[contadorAdmin].cidade_estado);
+        puts(cadastrar[contadorAdmin].telefone);
+        puts(cadastrar[contadorAdmin].senha);
     printf("--------------------------------\n");
     opcao = 0;
     printf("Para cancelar digite 0 para confirmar digite 1\n");
@@ -298,6 +315,8 @@ int cadastroAdmin()
         cadastroAdmin();
     }else
     {
+        cadastroLoginAdmin();
+        contadorAdmin++;
         printf("Cadastro efetuado com sucesso!\n");
         main();
     }
@@ -311,7 +330,7 @@ int cadastroAdmin()
 int main()
 {
 
-    printf("Bem-vindo ao sistema Admin CTA\n");
+    printf("Bem-vindo ao sistema CTA Airlines\n");
     printf("------------------------------\n");
     printf("0 - Sair\n");
     printf("1 - Login\n");
