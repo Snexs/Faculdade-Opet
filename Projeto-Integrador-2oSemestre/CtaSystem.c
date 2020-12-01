@@ -1,12 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#define MAX 1000
 
 #pragma region Struct
 
-struct usuario_st {
+typedef struct{
     char login[32];
 	char senha[32];
-};
+    char adminUser[32];
+}usuario_st;
 
 struct list_avioes{
     int numero;
@@ -19,10 +22,10 @@ struct list_avioes{
 //transformar em struc de array , encontro isso na aula 10
 typedef struct{
     int id;
-    char nome[32];
+    char nome[60];
 	char cpf[15];
-    char email[20];
-    char endereco[18];
+    char email[32];
+    char endereco[30];
     char numero[10];
     char complemento[15];
     char cidade_estado[12];
@@ -30,12 +33,12 @@ typedef struct{
     char senha[32];
 }register_st;
 
-typedef struct {
+typedef struct{
     int id;
-    char nome[32];
+    char nome[60];
 	char cpf[15];
-    char email[20];
-    char endereco[18];
+    char email[32];
+    char endereco[30];
     char numero[10];
     char complemento[15];
     char cidade_estado[12];
@@ -44,7 +47,11 @@ typedef struct {
     char IdFuncionario[10];
 }registerAdmin_st;
 
-int opcao,contador = 0,contadorAdmin = 0,indiceUser = 0,indiceAdmin = 0;
+int opcao,contador = 0,contadorAdmin = 0,indiceUser = 0,indiceAdmin = 0,indiceCadastroUser = 0,indiceCadastroUserAdmin = 0;
+
+register_st cadastrar[MAX];
+usuario_st usuario[MAX];
+registerAdmin_st cadastrarAdmin[MAX];
 
 #pragma endregion
 
@@ -62,7 +69,7 @@ int login()
     printf("----------------------------------\n");
 
   switch (opcao)
-{
+    {
     case 0:
       exit(0);
       break;
@@ -77,57 +84,86 @@ int login()
   default:
     printf("Favor escolher uma opcao valida");
       break;
+    }
+
+    char user_entry[32],password_entry[32];
+	int tentativas = 0,i = 0;;
+    do {
+        printf("Login: ");
+        scanf("%s", &user_entry[32]);
+        printf("Senha: ");
+        scanf("%s", &password_entry[32]);
+        
+        //descobre o usuario na lista(struct)
+        //debugar o for e o login, pois nao esta funcionando
+        for (i = 0; i < MAX; i++){
+            if (!strcmp("", user_entry[32])){
+                printf("Nenhum usuário encontrado, abrindo cadastro!\n");
+                cadastroCliente();
+            }else{
+                if (!strcmp(user_entry[32],usuario[i].login)){
+                    return i;
+                }else{
+                    if (!strcmp(user_entry[32],usuario[i].adminUser))
+                        return i;
+                }
+            }   
+        }
+  
+        //validacoes login
+        if (!strcmp(user_entry[32], usuario[i].login) && !strcmp(password_entry[32], usuario[i].senha)) {
+            printf("Bem vindo %s\n", usuario[i].login);
+            return ListClient();
+        }else{
+            if (!strcmp(user_entry[32], usuario[i].adminUser) && !strcmp(password_entry[32], usuario[i].senha)) {
+            printf("Bem vindo %s\n", usuario[i].adminUser);
+            return dashboardAdmin();
+            } else {
+            printf("Usuario ou senha invalidos!\n");
+            tentativas++;
+            }
+        }
+    } while (tentativas < 3);
+    printf("Numero maximo de tentativas alcancado!\n");
+    return 0;
 }
 
- struct usuario_st usuario;
+#pragma endregion
 
-if (!strcmp("", usuario.login)) {
-		printf("Nenhum usuário encontrado, abrindo cadastro!\n");
-		cadastroCliente();
-	} else {
-	    int tentativas = 0;
-		do {
-			char user_Model[] = "user";
-            char password_Model[] = "user";
-            char adminUser_Model[] = "admin";
-            char adminPassword_Model[] = "admincta";
-			printf("Login: ");
-			scanf("%s", &usuario.login);
-			printf("Senha: ");
-			scanf("%s", &usuario.senha);
-            if (!strcmp(usuario.login, user_Model) && !strcmp(usuario.senha, password_Model)) {
-				printf("Bem vindo %s\n", usuario.login);
-				return dashboard();
-            }else{
-                if (!strcmp(usuario.login, adminUser_Model) && !strcmp(usuario.senha, adminPassword_Model)) {
-				printf("Bem vindo %s\n", usuario.login);
-				return dashboardAdmin();
-			    } else {
-				printf("Usuario ou senha invalidos!\n");
-				tentativas++;
-			    }
-            }
-			
-		} while (tentativas < 3);
-		printf("Numero maximo de tentativas alcancado!\n");
-        return 0;
-	}
+#pragma region Funcao Listar Cliente
+
+int ListClient(){
+    for (int i = 0; i < MAX; i++)
+    {
+        printf("%d\n",cadastrar[i].id);
+        printf("%s\n",cadastrar[i].nome);
+        printf("%s\n",cadastrar[i].cpf);
+        printf("%s\n",cadastrar[i].email);
+        printf("%s\n",cadastrar[i].endereco);
+        printf("%s\n",cadastrar[i].numero);
+        printf("%s\n",cadastrar[i].cidade_estado);
+        printf("%s\n",cadastrar[i].telefone);
+    }
 }
 
 #pragma endregion
 
 #pragma region CadastroLoginUser
 
-void cadastroLoginUser(){
-
+int cadastroLoginUser(){  
+    strcpy(usuario[indiceCadastroUser].login,cadastrar[contador].email);
+    strcpy(usuario[indiceCadastroUser].senha,cadastrar[contador].senha);
+    indiceCadastroUser++;
 }
 
 #pragma endregion
 
 #pragma region CadastroLoginAdmin
 
-void cadastroLoginAdmin(){
-    
+int cadastroLoginAdmin(){
+    strcpy(usuario[indiceCadastroUserAdmin].login,cadastrar[contadorAdmin].email);
+    strcpy(usuario[indiceCadastroUserAdmin].senha,cadastrar[contadorAdmin].senha);
+    indiceCadastroUserAdmin++;
 }
 
 #pragma endregion
@@ -186,11 +222,8 @@ int cadastroCliente()
     printf("Favor escolher uma opcao valida");
       break;
 }
-    
-    register_st cadastrar[100];
-
         printf("Nome: ");
-        scanf("%s", &cadastrar[contador].nome);
+        scanf(" %[^\n]s",&cadastrar[contador].nome);
         printf("CPF: ");
         scanf("%s", &cadastrar[contador].cpf);
         printf("Email: ");
@@ -207,7 +240,7 @@ int cadastroCliente()
         scanf("%s", &cadastrar[contador].telefone);
         printf("Senha: ");
         scanf("%s", &cadastrar[contador].senha);
-        cadastrar[contador].id++;
+    
     printf("--------------------------------\n");
         puts(cadastrar[contador].nome);
         puts(cadastrar[contador].cpf);
@@ -219,6 +252,7 @@ int cadastroCliente()
         puts(cadastrar[contador].telefone);
         puts(cadastrar[contador].senha);
     printf("--------------------------------\n");
+    cadastrar[contador].id = cadastrar[contador].id + 1;
     opcao = 0;
     printf("Para cancelar digite 0 para confirmar digite 1\n");
     scanf("%d", &opcao);
@@ -229,6 +263,8 @@ int cadastroCliente()
         cadastroCliente();
     }else
     {
+        printf("Id Usuario %d!\n",cadastrar[contador].id);
+        printf("Index Usuario %d!\n",contador);
         cadastroLoginUser();
         contador++;
         printf("Cadastro efetuado com sucesso!\n");
@@ -268,43 +304,42 @@ int cadastroAdmin()
   default:
     printf("Favor escolher uma opcao valida");
       break;
-}
-
-    registerAdmin_st cadastrar[100];
-
+}   
         printf("Nome: ");
-        scanf("%s", &cadastrar[contadorAdmin].nome);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].nome);
         printf("CPF: ");
-        scanf("%s", &cadastrar[contadorAdmin].cpf);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].cpf);
         printf("Email: ");
-        scanf("%s", &cadastrar[contadorAdmin].email);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].email);
         printf("Endereco: ");
-        scanf("%s", &cadastrar[contadorAdmin].endereco);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].endereco);
         printf("Numero: ");
-        scanf("%s", &cadastrar[contadorAdmin].numero);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].numero);
         printf("Complemento: ");
-        scanf("%s", &cadastrar[contadorAdmin].complemento);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].complemento);
         printf("Cidade-UF: ");
-        scanf("%s", &cadastrar[contadorAdmin].cidade_estado);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].cidade_estado);
         printf("Telefone (DDD)12345-6789: ");
-        scanf("%s", &cadastrar[contadorAdmin].telefone);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].telefone);
         printf("Senha: ");
-        scanf("%s", &cadastrar[contadorAdmin].senha);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].senha);
         printf("Id Funcionario: ");
-        scanf("%s", &cadastrar[contadorAdmin].IdFuncionario);
+        scanf("%s", &cadastrarAdmin[contadorAdmin].IdFuncionario);
 
-    printf("--------------------------------\n");
-        puts(cadastrar[contadorAdmin].IdFuncionario);
-        puts(cadastrar[contadorAdmin].nome);
-        puts(cadastrar[contadorAdmin].cpf);
-        puts(cadastrar[contadorAdmin].email);
-        puts(cadastrar[contadorAdmin].endereco);
-        puts(cadastrar[contadorAdmin].numero);
-        puts(cadastrar[contadorAdmin].complemento);
-        puts(cadastrar[contadorAdmin].cidade_estado);
-        puts(cadastrar[contadorAdmin].telefone);
-        puts(cadastrar[contadorAdmin].senha);
-    printf("--------------------------------\n");
+        printf("--------------------------------\n");
+        puts(cadastrarAdmin[contadorAdmin].id);
+        puts(cadastrarAdmin[contadorAdmin].IdFuncionario);
+        puts(cadastrarAdmin[contadorAdmin].nome);
+        puts(cadastrarAdmin[contadorAdmin].cpf);
+        puts(cadastrarAdmin[contadorAdmin].email);
+        puts(cadastrarAdmin[contadorAdmin].endereco);
+        puts(cadastrarAdmin[contadorAdmin].numero);
+        puts(cadastrarAdmin[contadorAdmin].complemento);
+        puts(cadastrarAdmin[contadorAdmin].cidade_estado);
+        puts(cadastrarAdmin[contadorAdmin].telefone);
+        puts(cadastrarAdmin[contadorAdmin].senha);
+        printf("--------------------------------\n");
+    cadastrarAdmin[contadorAdmin].id++;
     opcao = 0;
     printf("Para cancelar digite 0 para confirmar digite 1\n");
     scanf("%d", &opcao);
@@ -325,7 +360,7 @@ int cadastroAdmin()
 
 #pragma endregion
 
-#pragma region Program
+#pragma region Main
 
 int main()
 {
