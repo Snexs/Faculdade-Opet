@@ -135,7 +135,7 @@ int login()
 
 #pragma region Funcao Include
 
-void IncludeUser(int codigo,char nome,int cpf,char *email,char *endereco,int numero,char *complemento,char *cidade_estado,int telefone,char *senha){
+void IncludeUser(int codigo,char *nome,int cpf,char *email,char *endereco,int numero,char *complemento,char *cidade_estado,int telefone,char *senha){
 
     if (codigo > MAX)
     {
@@ -143,16 +143,17 @@ void IncludeUser(int codigo,char nome,int cpf,char *email,char *endereco,int num
     }else if (codigo < 0){
         printf("Erro na inclusao,Favor inseir um valor menor que %d",codigo);
     }else{
+        printf("%d,%s,%d,%s,%s,%d,%s,%s,%d,%s\n",codigo,nome,cpf,email,endereco,numero,complemento,cidade_estado,telefone,senha);
         cadastrar[codigo].id++;
-        cadastrar[codigo].nome = nome;
-        cadastrar[codigo].cpf = cpf;
-        cadastrar[codigo].email = email;
-        cadastrar[codigo].endereco = endereco;
-        cadastrar[codigo].numero = numero;
-        cadastrar[codigo].complemento = complemento;
-        cadastrar[codigo].cidade_estado = cidade_estado;
-        cadastrar[codigo].telefone = telefone;
-        cadastrar[codigo].senha = senha;
+        strcpy(cadastrar[codigo].nome, nome);
+        strcpy(cadastrar[codigo].cpf, cpf);
+        strcpy(cadastrar[codigo].email, email);
+        strcpy(cadastrar[codigo].endereco, endereco);
+        strcpy(cadastrar[codigo].numero, numero);
+        strcpy(cadastrar[codigo].complemento, complemento);
+        strcpy(cadastrar[codigo].cidade_estado, cidade_estado);
+        strcpy(cadastrar[codigo].telefone, telefone);
+        strcpy(cadastrar[codigo].senha, senha);
     }
 }
 
@@ -166,14 +167,14 @@ int ListClient(){
         printf("dentro do for\n");
         
             printf("antes do printf\n");
-            // printf("%s\n",cadastrar[i].id);
-            // printf("%s\n",cadastrar[i].nome);
-            // printf("%s\n",cadastrar[i].cpf);
-            // printf("%s\n",cadastrar[i].email);
-            // printf("%s\n",cadastrar[i].endereco);
-            // printf("%s\n",cadastrar[i].numero);
-            // printf("%s\n",cadastrar[i].cidade_estado);
-            // printf("%s\n",cadastrar[i].telefone);
+            printf("%s\n",cadastrar[i].id);
+            printf("%s\n",cadastrar[i].nome);
+            printf("%s\n",cadastrar[i].cpf);
+            printf("%s\n",cadastrar[i].email);
+            printf("%s\n",cadastrar[i].endereco);
+            printf("%s\n",cadastrar[i].numero);
+            printf("%s\n",cadastrar[i].cidade_estado);
+            printf("%s\n",cadastrar[i].telefone);
             printf("antes do puts\n");
             puts(cadastrar[i].nome);
             puts(cadastrar[i].cpf);
@@ -192,20 +193,14 @@ int ListClient(){
 #pragma region Banco de dados de clientes
 
 int InsereClientesDB(){
-    for (contador = 0; contador < 5; contador++)
-    {
-        IncluirUser(contador,"teste",12345678900,"teste@teste.com","rua teste",123,"Casa 3","CWB-PR",41123456789,"senha");
-        puts(cadastrar[contador].nome);
-        puts(cadastrar[contador].cpf);
-        puts(cadastrar[contador].email);
-        puts(cadastrar[contador].endereco);
-        puts(cadastrar[contador].numero);
-        puts(cadastrar[contador].complemento);
-        puts(cadastrar[contador].cidade_estado);
-        puts(cadastrar[contador].telefone);
-        printf("%d\n",contador);
+    
+        IncludeUser(0,"teste",123456789,"teste@teste.com","rua teste",123,"Casa 3","CWB-PR",4112345,"senha");
+        IncludeUser(1,"teste",123456789,"teste@teste.com","rua teste",123,"Casa 3","CWB-PR",4112345,"senha");
+        IncludeUser(2,"teste",123456789,"teste@teste.com","rua teste",123,"Casa 3","CWB-PR",4112345,"senha");
+        IncludeUser(3,"teste",123456789,"teste@teste.com","rua teste",123,"Casa 3","CWB-PR",4112345,"senha");
+        IncludeUser(4,"teste",123456789,"teste@teste.com","rua teste",123,"Casa 3","CWB-PR",4112345,"senha");
+        IncludeUser(5,"teste",123456789,"teste@teste.com","rua teste",123,"Casa 3","CWB-PR",4112345,"senha");
         printf("Cliente cadastrado com sucesso!\n");
-    }
 }
 
 #pragma endregion
