@@ -19,30 +19,29 @@ struct list_avioes{
     int horario_chegada;
 };
 
-//transformar em struc de array , encontro isso na aula 10
 typedef struct{
     int id;
     char nome[60];
-	char cpf[15];
-    char email[32];
+	int cpf[13];
+    char email[40];
     char endereco[30];
-    char numero[10];
+    int numero[10];
     char complemento[15];
     char cidade_estado[12];
-    char telefone[18];
+    int telefone[13];
     char senha[32];
 }register_st;
 
 typedef struct{
     int id;
     char nome[60];
-	char cpf[15];
-    char email[32];
+	int cpf[13];
+    char email[40];
     char endereco[30];
-    char numero[10];
+    int numero[10];
     char complemento[15];
     char cidade_estado[12];
-    char telefone[18];
+    int telefone[13];
     char senha[32];
     char IdFuncionario[10];
 }registerAdmin_st;
@@ -97,15 +96,19 @@ int login()
         //descobre o usuario na lista(struct)
         //debugar o for e o login, pois nao esta funcionando
         for (i = 0; i < MAX; i++){
+            printf("Dentro do for %d!\n",i);
             if (!strcmp("", user_entry[32])){
                 printf("Nenhum usuário encontrado, abrindo cadastro!\n");
                 cadastroCliente();
             }else{
                 if (!strcmp(user_entry[32],usuario[i].login)){
+                    printf("Dentro do for e do IF USER %d!\n",i);
                     return i;
                 }else{
-                    if (!strcmp(user_entry[32],usuario[i].adminUser))
+                    if (!strcmp(user_entry[32],usuario[i].adminUser)){
+                        printf("Dentro do for do if e do IF ADMIN %d!\n",i);
                         return i;
+                    }
                 }
             }   
         }
@@ -130,19 +133,78 @@ int login()
 
 #pragma endregion
 
+#pragma region Funcao Include
+
+void IncludeUser(int codigo,char nome,int cpf,char *email,char *endereco,int numero,char *complemento,char *cidade_estado,int telefone,char *senha){
+
+    if (codigo > MAX)
+    {
+        printf("Erro na inclusao,Favor inseir um valor menor que %d",MAX);
+    }else if (codigo < 0){
+        printf("Erro na inclusao,Favor inseir um valor menor que %d",codigo);
+    }else{
+        cadastrar[codigo].id++;
+        cadastrar[codigo].nome = nome;
+        cadastrar[codigo].cpf = cpf;
+        cadastrar[codigo].email = email;
+        cadastrar[codigo].endereco = endereco;
+        cadastrar[codigo].numero = numero;
+        cadastrar[codigo].complemento = complemento;
+        cadastrar[codigo].cidade_estado = cidade_estado;
+        cadastrar[codigo].telefone = telefone;
+        cadastrar[codigo].senha = senha;
+    }
+}
+
+#pragma endregion
+
 #pragma region Funcao Listar Cliente
 
 int ListClient(){
-    for (int i = 0; i < MAX; i++)
+    for (int i = 0; i < contador; i++)
     {
-        printf("%d\n",cadastrar[i].id);
-        printf("%s\n",cadastrar[i].nome);
-        printf("%s\n",cadastrar[i].cpf);
-        printf("%s\n",cadastrar[i].email);
-        printf("%s\n",cadastrar[i].endereco);
-        printf("%s\n",cadastrar[i].numero);
-        printf("%s\n",cadastrar[i].cidade_estado);
-        printf("%s\n",cadastrar[i].telefone);
+        printf("dentro do for\n");
+        
+            printf("antes do printf\n");
+            // printf("%s\n",cadastrar[i].id);
+            // printf("%s\n",cadastrar[i].nome);
+            // printf("%s\n",cadastrar[i].cpf);
+            // printf("%s\n",cadastrar[i].email);
+            // printf("%s\n",cadastrar[i].endereco);
+            // printf("%s\n",cadastrar[i].numero);
+            // printf("%s\n",cadastrar[i].cidade_estado);
+            // printf("%s\n",cadastrar[i].telefone);
+            printf("antes do puts\n");
+            puts(cadastrar[i].nome);
+            puts(cadastrar[i].cpf);
+            puts(cadastrar[i].email);
+            puts(cadastrar[i].endereco);
+            puts(cadastrar[i].numero);
+            puts(cadastrar[i].complemento);
+            puts(cadastrar[i].cidade_estado);
+            puts(cadastrar[i].telefone);
+
+    }
+}
+
+#pragma endregion
+
+#pragma region Banco de dados de clientes
+
+int InsereClientesDB(){
+    for (contador = 0; contador < 5; contador++)
+    {
+        IncluirUser(contador,"teste",12345678900,"teste@teste.com","rua teste",123,"Casa 3","CWB-PR",41123456789,"senha");
+        puts(cadastrar[contador].nome);
+        puts(cadastrar[contador].cpf);
+        puts(cadastrar[contador].email);
+        puts(cadastrar[contador].endereco);
+        puts(cadastrar[contador].numero);
+        puts(cadastrar[contador].complemento);
+        puts(cadastrar[contador].cidade_estado);
+        puts(cadastrar[contador].telefone);
+        printf("%d\n",contador);
+        printf("Cliente cadastrado com sucesso!\n");
     }
 }
 
@@ -355,7 +417,6 @@ int cadastroAdmin()
         printf("Cadastro efetuado com sucesso!\n");
         main();
     }
-
 }
 
 #pragma endregion
@@ -370,6 +431,7 @@ int main()
     printf("0 - Sair\n");
     printf("1 - Login\n");
     printf("2 - Cadastro\n");
+    printf("3 - Insere e lista clientes\n");
     scanf("%d",&opcao);
     printf("----------------------------------\n");
 
@@ -378,11 +440,16 @@ int main()
     case 0:
       exit(0);
       break;
-  case 1:
+    case 1:
       login();
       break;
-  case 2:
+    case 2:
       cadastroCliente();
+      break;
+    case 3:
+      InsereClientesDB();
+      ListClient();
+      main();
       break;
   default:
     printf("Favor escolher uma opcao valida");
