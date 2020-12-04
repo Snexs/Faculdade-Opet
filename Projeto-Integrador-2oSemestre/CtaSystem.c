@@ -6,39 +6,38 @@
 #pragma region Struct
 
 typedef struct SystemLogin{
-    char login[32];
+    char login[60];
 	char senha[32];
-    char adminUser[32];
+    char adminUser[60];
 } Usuario_st;
 
 typedef struct RegisterUser{
     int id;
     char nome[60];
-	int cpf[13];
-    char email[40];
+	long long int cpf;
+    char email[60];
     char endereco[30];
-    int numero[10];
-    char complemento[15];
-    char cidade_estado[12];
-    long int telefone[13];
+    int numero;
+    char complemento[20];
+    char cidade_estado[20];
+    long long int telefone;
     char senha[32];
 } Register_st;
 
 typedef struct RegisterAdmin{
     int id;
     char nome[60];
-	int cpf[13];
+	long long int cpf;
     char email[40];
     char endereco[30];
-    int numero[10];
+    int numero;
     char complemento[15];
     char cidade_estado[12];
-    long int telefone[13];
+    long long int telefone;
     char senha[32];
-    char IdFuncionario[10];
 } RegisterAdmin_st;
 
-int opcao,contador = 0,contadorAdmin = 0,indiceUser = 0,indiceAdmin = 0,indiceCadastroUser = 0,indiceCadastroUserAdmin = 0;
+int opcao,contador = 0,contadorAdmin = 0,indiceUsuario = 1,indiceAdmin = 1,indiceCadastroUser = 0,indiceCadastroUserAdmin = 0;
 
 Register_st cadastrar[MAX];
 Usuario_st usuario[MAX];
@@ -77,13 +76,13 @@ int login()
       break;
     }
 
-    char user_entry[32],password_entry[32];
+    char user_entry[32],senha_entry[32];
 	int tentativas = 0,i = 0;;
     do {
         printf("Login: ");
         scanf("%s", &user_entry[32]);
         printf("Senha: ");
-        scanf("%s", &password_entry[32]);
+        scanf("%s", &senha_entry[32]);
         
         //descobre o usuario na lista(struct)
         //debugar o for e o login, pois nao esta funcionando
@@ -106,11 +105,11 @@ int login()
         }
   
         //validacoes login
-        if (!strcmp(user_entry[32], usuario[i].login) && !strcmp(password_entry[32], usuario[i].senha)) {
+        if (!strcmp(user_entry[32], usuario[i].login) && !strcmp(senha_entry[32], usuario[i].senha)) {
             printf("Bem vindo %s\n", usuario[i].login);
             return ListClient();
         }else{
-            if (!strcmp(user_entry[32], usuario[i].adminUser) && !strcmp(password_entry[32], usuario[i].senha)) {
+            if (!strcmp(user_entry[32], usuario[i].adminUser) && !strcmp(senha_entry[32], usuario[i].senha)) {
             printf("Bem vindo %s\n", usuario[i].adminUser);
             return dashboardAdmin();
             } else {
@@ -127,73 +126,74 @@ int login()
 
 #pragma region Funcao Include
 
-void IncludeUser(int codigo,char *nome,int cpf,char *email,char *endereco,int numero,char *complemento,char *cidade_estado,int telefone,char *senha){
-
-    if (codigo > MAX || strcmp(cadastrar[codigo].nome,"") == 0 || strcmp(cadastrar[codigo].email,"") == 0 || strcmp(cadastrar[codigo].endereco,"") == 0 || strcmp(cadastrar[codigo].complemento,"") == 0 || strcmp(cadastrar[codigo].cidade_estado,"") == 0 || strcmp(cadastrar[codigo].senha,"") == 0)
+void IncluirUsuarios(int indiceUsuario,char *nome,long long int cpf,char *email,char *endereco,int numero,char *complemento,char *cidade_estado,long long int telefone,char *senha,int verifcadorUsuario){
+    
+    // Se verifcadorUsuario == 0 é considerado Usuario se verifcadorUsuario == 1 é considerado Admin
+    if (verifcadorUsuario == 1)
     {
-        printf("Erro na inclusao,Favor inseir um valor menor que %d",MAX);
-    }else if (codigo < 0){
-        printf("Erro na inclusao,Favor inseir um valor menor que %d",codigo);
+        cadastrarAdmin[indiceUsuario].id = indiceAdmin;
+        strcpy(cadastrarAdmin[indiceUsuario].nome, nome);
+        cadastrarAdmin[indiceUsuario].cpf = cpf;
+        strcpy(cadastrarAdmin[indiceUsuario].email, email);
+        strcpy(cadastrarAdmin[indiceUsuario].endereco, endereco);
+        cadastrarAdmin[indiceUsuario].numero = numero;
+        strcpy(cadastrarAdmin[indiceUsuario].complemento, complemento);
+        strcpy(cadastrarAdmin[indiceUsuario].cidade_estado, cidade_estado);
+        cadastrarAdmin[indiceUsuario].telefone = telefone;
+        strcpy(cadastrarAdmin[indiceUsuario].senha, senha);
+        printf("Admin cadastrado com sucesso!\n");
+        indiceAdmin++;
     }else{
-        cadastrar[codigo].id++;
-        strcpy(cadastrar[codigo].nome, nome);
-        cadastrar[codigo].cpf = cpf;
-        strcpy(cadastrar[codigo].email, email);
-        strcpy(cadastrar[codigo].endereco, endereco);
-        cadastrar[codigo].numero = numero;
-        strcpy(cadastrar[codigo].complemento, complemento);
-        strcpy(cadastrar[codigo].cidade_estado, cidade_estado);
-        cadastrar[codigo].telefone = telefone;
-        strcpy(cadastrar[codigo].senha, senha);
-        printf("Cliente cadastrado com sucesso! %d , %s , %d , %s , %s , %d , %s , %s , %d , %s\n",codigo,nome,cpf,email,endereco,numero,complemento,cidade_estado,telefone,senha);
-    }
+        cadastrar[indiceUsuario].id = indiceUsuario;
+        strcpy(cadastrar[indiceUsuario].nome, nome);
+        cadastrar[indiceUsuario].cpf = cpf;
+        strcpy(cadastrar[indiceUsuario].email, email);
+        strcpy(cadastrar[indiceUsuario].endereco, endereco);
+        cadastrar[indiceUsuario].numero = numero;
+        strcpy(cadastrar[indiceUsuario].complemento, complemento);
+        strcpy(cadastrar[indiceUsuario].cidade_estado, cidade_estado);
+        cadastrar[indiceUsuario].telefone = telefone;
+        strcpy(cadastrar[indiceUsuario].senha, senha);
+        printf("Cliente cadastrado com sucesso!\n");
+        indiceUsuario++;
+    }    
 }
 
 #pragma endregion
 
 #pragma region Funcao Update
 
-void UpdateUser(int id,char *nome,int cpf,char *email,char *endereco,int numero,char *complemento,char *cidade_estado,int telefone,char *senha){
-
-    if (id > MAX || strcmp(cadastrar[id].nome,"") == 0 || strcmp(cadastrar[id].email,"") == 0 || strcmp(cadastrar[id].endereco,"") == 0 || strcmp(cadastrar[id].complemento,"") == 0 || strcmp(cadastrar[id].cidade_estado,"") == 0 || strcmp(cadastrar[id].senha,"") == 0)
-    {
-        printf("Erro na inclusao,Favor inseir um valor menor que %d",MAX);
-    }else if (id < 0){
-        printf("Erro na inclusao,Favor inseir um valor menor que %d",id);
-    }else{
-        strcpy(cadastrar[id].nome, nome);
-        cadastrar[id].cpf = cpf;
-        strcpy(cadastrar[id].email, email);
-        strcpy(cadastrar[id].endereco, endereco);
-        cadastrar[id].numero = numero;
-        strcpy(cadastrar[id].complemento, complemento);
-        strcpy(cadastrar[id].cidade_estado, cidade_estado);
-        cadastrar[id].telefone = telefone;
-        strcpy(cadastrar[id].senha, senha);
-        printf("Alteracao realizada com sucesso: %d , %s , %d , %s , %s , %d , %s , %s , %d , %s\n POR:\n %s , %d , %s , %s , %d , %s , %s , %d , %s\n",id,cadastrar[id].nome,cadastrar[id].cpf,
-        cadastrar[id].email,cadastrar[id].complemento,cadastrar[id].cidade_estado,cadastrar[id].telefone,cadastrar[id].senha,nome,cpf,email,endereco,numero,complemento,cidade_estado,telefone,senha);
-    }
-
+void AtualizarDados(int id,char *nome,long long int cpf,char *email,char *endereco,int numero,char *complemento,char *cidade_estado,long long int telefone,char *senha){
+    strcpy(cadastrar[id].nome, nome);
+    cadastrar[id].cpf = cpf;
+    strcpy(cadastrar[id].email, email);
+    strcpy(cadastrar[id].endereco, endereco);
+    cadastrar[id].numero = numero;
+    strcpy(cadastrar[id].complemento, complemento);
+    strcpy(cadastrar[id].cidade_estado, cidade_estado);
+    cadastrar[id].telefone = telefone;
+    strcpy(cadastrar[id].senha, senha);
+    printf("Atualizacao realizada com sucesso!");    
 }
 
 #pragma endregion
 
 #pragma region Funcao Delete
 
-void DeleteUser(int id){
-    char name[20];
-    char adress[20];
-    char adress2[20];
-    char Email[20];
-    char city_state[20];
-    char password[20];
+void ExcluirCliente(int id){
+    char nome[60];
+    char endereco[60];
+    char complemento[60];
+    char Email[60];
+    char cidade_uf[60];
+    char senha[60];
 
-    strcpy(name,cadastrar[id].nome);
-    strcpy(adress,cadastrar[id].endereco);
-    strcpy(adress2,cadastrar[id].complemento);
+    strcpy(nome,cadastrar[id].nome);
+    strcpy(endereco,cadastrar[id].endereco);
+    strcpy(complemento,cadastrar[id].complemento);
     strcpy(Email,cadastrar[id].email);
-    strcpy(city_state,cadastrar[id].cidade_estado);
-    strcpy(password,cadastrar[id].senha);
+    strcpy(cidade_uf,cadastrar[id].cidade_estado);
+    strcpy(senha,cadastrar[id].senha);
 
     strcpy(cadastrar[id].nome,"");
     strcpy(cadastrar[id].endereco,"");
@@ -205,7 +205,7 @@ void DeleteUser(int id){
     cadastrar[id].telefone = 0;
     cadastrar[id].numero = 0;
     cadastrar[id].cpf = 0;
-    printf("Exclusao realizada com sucesso: %d , %s\n",id,name);
+    printf("Exclusao realizada com sucesso: %d , %s\n",id,nome);
 }
 
 
@@ -214,57 +214,160 @@ void DeleteUser(int id){
 #pragma region Funcao Listar Cliente
 
 int ListClient(){
-    for (int i = 0; i < contador; i++)
-    {
-        printf("dentro do for\n");
-        printf("%s\n",cadastrar[i].id);
-        printf("%s\n",cadastrar[i].nome);
-        printf("%s\n",cadastrar[i].cpf);
-        printf("%s\n",cadastrar[i].email);
-        printf("%s\n",cadastrar[i].endereco);
-        printf("%s\n",cadastrar[i].numero);
-        printf("%s\n",cadastrar[i].cidade_estado);
-        printf("%s\n",cadastrar[i].telefone);
-    }
+    for (int i = 1; i < MAX; i++)
+        if (!cadastrar[i].id == 0){
+            printf("Cliente: %d , %s , %lld , %s , %s , %d , %s ,%lld\n",cadastrar[i].id,
+            cadastrar[i].nome,cadastrar[i].cpf,cadastrar[i].email,cadastrar[i].endereco,
+            cadastrar[i].numero,cadastrar[i].cidade_estado,cadastrar[i].telefone);
+        }else if (!cadastrarAdmin[i].id == 0)
+        {
+            printf("Admin: %d , %s , %lld , %s , %s , %d , %s ,%lld\n",cadastrarAdmin[i].id,
+            cadastrarAdmin[i].nome,cadastrarAdmin[i].cpf,cadastrarAdmin[i].email,cadastrarAdmin[i].endereco,
+            cadastrarAdmin[i].numero,cadastrarAdmin[i].cidade_estado,cadastrarAdmin[i].telefone);
+        }
+        
 }
 
 #pragma endregion
 
 #pragma region Banco de dados de clientes
 
-int InsertClientsDB(){
-    for (int i = 0; i < 6; i++)
-    {
-        IncludeUser(i,"teste",123456789,"teste@teste.com","rua teste",123,"Casa 3","CWB-PR",4112345,"senha");
-        printf("Cliente %d cadastrado com sucesso!\n",i);
-    }
+void InsertClientsDB(){
+    for (indiceUsuario = 1; indiceUsuario < 6; indiceUsuario++)
+        IncluirUsuarios(indiceUsuario,"teste",12312312312,"teste@teste.com","rua teste",indiceUsuario,"Casa","CWB-PR",41123451234,"senha",0);
+
+    for (int ii = 6; ii < 9; ii++)
+        IncluirUsuarios(indiceUsuario,"testeAdmin",12312312312,"teste@teste.com","rua teste",indiceAdmin,"Casa","CWB-PR",41123451234,"senha",1);
+    
 }
 
 #pragma endregion
 
-#pragma region Inicializar Structs
+#pragma region Atualizar Dados
 
-void StartStructs(){
-    for (int i = 0; i < MAX; i++)
+void AtualizarDadosPage(){
+//Variaveis Locais
+char *nome[60],*endereco[30],*complemento[20],*email[60],*cidade_uf[20],*senha[32];
+long long int cpf = 0,telefone = 0;
+int id = 0,numero = 0;
+//Fim Variaveis Locais
+
+    printf("---- Pagina de Alteracao De Dados ----\n");
+    printf("--------------------------------------\n");
+    printf("0 - Sair\n");
+    printf("1 - Voltar para o menu\n");
+    printf("2 - Cadastro\n");
+    printf("3 - Alterar\n");
+    scanf("%d",&opcao);
+    printf("--------------------------------------\n");
+    switch (opcao)
     {
-        strcpy(cadastrar[i].nome,"");
-        strcpy(cadastrar[i].email,"");
-        strcpy(cadastrar[i].endereco,"");
-        strcpy(cadastrar[i].complemento,"");
-        strcpy(cadastrar[i].cidade_estado,"");
-        strcpy(cadastrar[i].senha,"");
-        cadastrar[i].cpf = 0;
-        cadastrar[i].numero = 0;
-        cadastrar[i].telefone = 0; 
-        cadastrar[i].id = 0; 
+    case 0:
+      exit(0);
+      break;
+  case 1:
+      main();
+      break;
+  case 2:
+      cadastroCliente();
+      break;
+  case 3:
+      break;
+  default:
+    printf("Favor escolher uma opcao valida");
+      break;
     }
+
+    printf("Insira o Id para alterar:");
+    scanf("%d",id);    
+    printf("--------------------------------------\n");
+    printf("Nome: ");
+    scanf(" %[^\n]s",&nome);
+    printf("CPF: ");
+    scanf("%lld", &cpf);
+    printf("Email: ");
+    scanf(" %[^\n]s", &email);
+    printf("Endereco: ");
+    scanf(" %[^\n]s", &endereco);
+    printf("Numero: ");
+    scanf("%d", &numero);
+    printf("Complemento: ");
+    scanf(" %[^\n]s", &complemento);
+    printf("Cidade-UF: ");
+    scanf(" %[^\n]s", &cidade_uf);
+    printf("Telefone DD123456789: ");
+    scanf("%lld", &telefone);
+    printf("Senha: ");
+    scanf(" %[^\n]s", &senha);
+
+    printf("--------------------------------------\n");
+    printf("Alteracao realizada com sucesso: %d , %s , %d , %s , %s , %d , %s , %s , %d , %s\n POR:\n %s , %d , %s , %s , %d , %s , %s , %d , %s\n",id,cadastrar[id].nome,cadastrar[id].cpf,
+    cadastrar[id].email,cadastrar[id].complemento,cadastrar[id].cidade_estado,cadastrar[id].telefone,cadastrar[id].senha,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha);
+    printf("--------------------------------------\n");
+    opcao = 0;
+    printf("Para cancelar tecle: 0\nPara confirmar tecle: 1\n");
+    scanf("%d", &opcao);
+
+    if (opcao == 0)
+    {
+        printf("Atualizacao cancelada com sucesso!\n");
+        cadastroCliente();
+    }else
+    {
+        AtualizarDados(id,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha);
+        CadastroLoginUsuario();
+        printf("Atualizacao efetuada com sucesso!\n");
+        main();
+    }
+    main();
+}
+
+#pragma endregion
+
+#pragma region Exclui Cliente
+
+void ExcluirClientePage(){
+//Variaveis Locais
+int id = 0;
+//Fim Variaveis Locais
+    printf("--- Pagina de Exclusao De Clientes ---\n");
+    printf("--------------------------------------\n");
+    printf("0 - Sair\n");
+    printf("1 - Voltar para o menu\n");
+    printf("2 - Cadastro\n");
+    printf("3 - Excluir\n");
+    scanf("%d",&opcao);
+    printf("--------------------------------------\n");
+    switch (opcao)
+    {
+    case 0:
+      exit(0);
+      break;
+  case 1:
+      main();
+      break;
+  case 2:
+      cadastroCliente();
+      break;
+  case 3:
+      break;
+  default:
+    printf("Favor escolher uma opcao valida");
+      break;
+    }
+
+    printf("Insira o Id para ser excluir:");
+    scanf("%d",id);    
+    printf("--------------------------------------\n");
+    ExcluirCliente(id);
+    main();
 }
 
 #pragma endregion
 
 #pragma region CadastroLoginUser
 
-int cadastroLoginUser(){  
+void CadastroLoginUsuario(){  
     strcpy(usuario[indiceCadastroUser].login,cadastrar[contador].email);
     strcpy(usuario[indiceCadastroUser].senha,cadastrar[contador].senha);
     indiceCadastroUser++;
@@ -274,7 +377,7 @@ int cadastroLoginUser(){
 
 #pragma region CadastroLoginAdmin
 
-int cadastroLoginAdmin(){
+void cadastroLoginAdmin(){
     strcpy(usuario[indiceCadastroUserAdmin].login,cadastrar[contadorAdmin].email);
     strcpy(usuario[indiceCadastroUserAdmin].senha,cadastrar[contadorAdmin].senha);
     indiceCadastroUserAdmin++;
@@ -309,6 +412,11 @@ int dashboardAdmin()
 
 int cadastroCliente()
 {
+// Local Variables
+char *nome[60],*endereco[30],*complemento[20],*email[60],*cidade_uf[20],*senha[32];
+long long int cpf = 0,telefone = 0;
+int numero = 0;
+//End Local Variables
     printf("--- Register Page CTA Systems ---\n");
     printf("----------------------------------\n");
     printf("Se deseja cadastrar um administrador efetue o login e cadastre depois de logar\n");
@@ -337,38 +445,30 @@ int cadastroCliente()
       break;
 }
         printf("Nome: ");
-        scanf(" %[^\n]s",&cadastrar[contador].nome);
+        scanf(" %[^\n]s",&nome);
         printf("CPF: ");
-        scanf("%s", &cadastrar[contador].cpf);
+        scanf("%lld", &cpf);
         printf("Email: ");
-        scanf("%s", &cadastrar[contador].email);
+        scanf(" %[^\n]s", &email);
         printf("Endereco: ");
-        scanf("%s", &cadastrar[contador].endereco);
+        scanf(" %[^\n]s", &endereco);
         printf("Numero: ");
-        scanf("%s", &cadastrar[contador].numero);
+        scanf("%d", &numero);
         printf("Complemento: ");
-        scanf("%s", &cadastrar[contador].complemento);
+        scanf(" %[^\n]s", &complemento);
         printf("Cidade-UF: ");
-        scanf("%s", &cadastrar[contador].cidade_estado);
-        printf("Telefone (DDD)12345-6789: ");
-        scanf("%s", &cadastrar[contador].telefone);
+        scanf(" %[^\n]s", &cidade_uf);
+        printf("Telefone DD123456789: ");
+        scanf("%lld", &telefone);
         printf("Senha: ");
-        scanf("%s", &cadastrar[contador].senha);
+        scanf(" %[^\n]s", &senha);
     
     printf("--------------------------------\n");
-        puts(cadastrar[contador].nome);
-        puts(cadastrar[contador].cpf);
-        puts(cadastrar[contador].email);
-        puts(cadastrar[contador].endereco);
-        puts(cadastrar[contador].numero);
-        puts(cadastrar[contador].complemento);
-        puts(cadastrar[contador].cidade_estado);
-        puts(cadastrar[contador].telefone);
-        puts(cadastrar[contador].senha);
+    printf("Nome: %s,CPF: %lld,E-Mail: %s,Endereco: %s,Numero: %d,Complemento: %s,Cidade-UF: %s,Telefone: %lld,Senha: %s\n",nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha);
     printf("--------------------------------\n");
-    cadastrar[contador].id = cadastrar[contador].id + 1;
+    
     opcao = 0;
-    printf("Para cancelar digite 0 para confirmar digite 1\n");
+    printf("Para cancelar tecle: 0\nPara confirmar tecle: 1\n");
     scanf("%d", &opcao);
 
     if (opcao == 0)
@@ -377,10 +477,8 @@ int cadastroCliente()
         cadastroCliente();
     }else
     {
-        printf("Id Usuario %d!\n",cadastrar[contador].id);
-        printf("Index Usuario %d!\n",contador);
-        cadastroLoginUser();
-        contador++;
+        IncluirUsuarios(indiceUsuario,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha,0);
+        CadastroLoginUsuario();
         printf("Cadastro efetuado com sucesso!\n");
         main();
     }
@@ -393,14 +491,19 @@ int cadastroCliente()
 
 int cadastroAdmin()
 {
+// Local Variables
+char *nome[60],*endereco[30],*complemento[20],*email[60],*cidade_uf[20],*senha[32];
+long long int cpf = 0,telefone = 0;
+int numero = 0,idFuncionario = 0;
+//End Local Variables
     printf("--- Admin Register Page CTA Systems ---\n");
-    printf("----------------------------------\n");
+    printf("---------------------------------------\n");
     printf("0 - Sair\n");
     printf("1 - Voltar para o menu\n");
     printf("2 - Login\n");
     printf("3 - Cadastrar\n");
     scanf("%d",&opcao);
-    printf("----------------------------------\n");
+    printf("---------------------------------------\n");
 
   switch (opcao)
 {
@@ -418,44 +521,32 @@ int cadastroAdmin()
   default:
     printf("Favor escolher uma opcao valida");
       break;
-}   
+}
         printf("Nome: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].nome);
+        scanf(" %[^\n]s",&nome);
         printf("CPF: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].cpf);
+        scanf("%lld", &cpf);
         printf("Email: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].email);
+        scanf(" %[^\n]s", &email);
         printf("Endereco: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].endereco);
+        scanf(" %[^\n]s", &endereco);
         printf("Numero: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].numero);
+        scanf("%d", &numero);
         printf("Complemento: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].complemento);
+        scanf(" %[^\n]s", &complemento);
         printf("Cidade-UF: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].cidade_estado);
-        printf("Telefone (DDD)12345-6789: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].telefone);
+        scanf(" %[^\n]s", &cidade_uf);
+        printf("Telefone DD123456789: ");
+        scanf("%lld", &telefone);
         printf("Senha: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].senha);
-        printf("Id Funcionario: ");
-        scanf("%s", &cadastrarAdmin[contadorAdmin].IdFuncionario);
-
-        printf("--------------------------------\n");
-        puts(cadastrarAdmin[contadorAdmin].id);
-        puts(cadastrarAdmin[contadorAdmin].IdFuncionario);
-        puts(cadastrarAdmin[contadorAdmin].nome);
-        puts(cadastrarAdmin[contadorAdmin].cpf);
-        puts(cadastrarAdmin[contadorAdmin].email);
-        puts(cadastrarAdmin[contadorAdmin].endereco);
-        puts(cadastrarAdmin[contadorAdmin].numero);
-        puts(cadastrarAdmin[contadorAdmin].complemento);
-        puts(cadastrarAdmin[contadorAdmin].cidade_estado);
-        puts(cadastrarAdmin[contadorAdmin].telefone);
-        puts(cadastrarAdmin[contadorAdmin].senha);
-        printf("--------------------------------\n");
-    cadastrarAdmin[contadorAdmin].id++;
+        scanf(" %[^\n]s", &senha);
+    
+    printf("--------------------------------\n");
+    printf("Nome: %s,CPF: %lld,E-Mail: %s,Endereco: %s,Numero: %d,Complemento: %s,Cidade-UF: %s,Telefone: %lld,Senha: %s\n",nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha);
+    printf("--------------------------------\n");
+    
     opcao = 0;
-    printf("Para cancelar digite 0 para confirmar digite 1\n");
+    printf("Para cancelar tecle: 0\nPara confirmar tecle: 1\n");
     scanf("%d", &opcao);
 
     if (opcao == 0)
@@ -464,11 +555,12 @@ int cadastroAdmin()
         cadastroAdmin();
     }else
     {
+        IncluirUsuarios(indiceUsuario,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha,1);
         cadastroLoginAdmin();
-        contadorAdmin++;
         printf("Cadastro efetuado com sucesso!\n");
         main();
     }
+
 }
 
 #pragma endregion
@@ -479,13 +571,17 @@ int main()
 {
 
     printf("Bem-vindo ao sistema CTA Airlines\n");
-    printf("------------------------------\n");
+    printf("---------------------------------\n");
     printf("0 - Sair\n");
     printf("1 - Login\n");
     printf("2 - Cadastro\n");
-    printf("3 - Insere e lista clientes\n");
+    printf("3 - Insere clientes\n");
+    printf("4 - Lista clientes\n");
+    printf("5 - Atualizar Dados\n");
+    printf("6 - Excluir Clientes\n");
+    printf("7 - Cadastrar Admin\n");
     scanf("%d",&opcao);
-    printf("----------------------------------\n");
+    printf("---------------------------------\n");
 
   switch (opcao)
   {
@@ -500,7 +596,22 @@ int main()
       break;
     case 3:
       InsertClientsDB();
+      main();
+      break;
+    case 4:
       ListClient();
+      main();
+      break;
+    case 5:
+      AtualizarDadosPage();
+      main();
+      break;
+    case 6:
+      ExcluirClientePage();
+      main();
+      break;
+    case 7:
+      cadastroAdmin();
       main();
       break;
   default:
