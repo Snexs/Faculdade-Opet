@@ -11,7 +11,7 @@ typedef struct SystemLogin{
     char adminUser[60];
 } Usuario_st;
 
-typedef struct RegisterUser{
+typedef struct CadastroClientes{
     int id;
     char nome[60];
 	long long int cpf;
@@ -24,7 +24,7 @@ typedef struct RegisterUser{
     char senha[32];
 } Register_st;
 
-typedef struct RegisterAdmin{
+typedef struct CadastroAdmin{
     int id;
     char nome[60];
 	long long int cpf;
@@ -45,36 +45,13 @@ RegisterAdmin_st cadastrarAdmin[MAX];
 
 #pragma endregion
 
-#pragma region Login
-
-int login()
+#pragma region Funcao Login
+// Esta funcao tem como objetivo validar e efetuar o login
+// Dos usuarios baseado nos dados digitados
+void login()
 {
-    printf("----- Login Page CTA Systems -----\n");
-    printf("----------------------------------\n");
-    printf("0 - Sair\n");
-    printf("1 - Voltar para o menu\n");
-    printf("2 - Cadastro\n");
-    printf("3 - Logar\n");
-    scanf("%d",&opcao);
-    printf("----------------------------------\n");
-
-  switch (opcao)
-    {
-    case 0:
-      exit(0);
-      break;
-  case 1:
-      main();
-      break;
-  case 2:
-      cadastroCliente();
-      break;
-  case 3:
-      break;
-  default:
-    printf("Favor escolher uma opcao valida");
-      break;
-    }
+    printf("------------ Pagina de Login CTA Systems ------------\n");
+    MenuOpcoesClientes();
 
     char *user_entry[60],*senha_entry[32];
 	int tentativas = 0,responseLogin = 0,responseSenha = 0;
@@ -83,7 +60,7 @@ int login()
         scanf("%s", &user_entry);
         printf("Senha: ");
         scanf("%s", &senha_entry);
-        printf("----------------------------------\n");
+        printf("-----------------------------------------------------\n");
         
         responseLogin = ValidarLogin(user_entry);
         responseSenha = ValidarSenha(senha_entry);
@@ -112,8 +89,9 @@ int login()
 
 #pragma endregion
 
-#pragma region Validacao Login
-
+#pragma region Funcao Validar Login
+// Esta funcao tem como objetivo buscar o login 
+// Inserido com o login cadastrado no banco de dados
 int ValidarLogin(char *user_entry){
 int i;
 for (i = 1; i < MAX; i++){
@@ -129,11 +107,12 @@ if (i >= MAX)
 
 #pragma endregion
 
-#pragma region Validacao Senha
-
+#pragma region Funcao Validar Senha
+// Esta funcao tem como objetivo buscar a senha 
+// Inserida com a senha cadastrada no banco de dados
 int ValidarSenha(char *senha_entry){
 int i;
-for (i = 1; i < 15; i++){
+for (i = 1; i < MAX; i++){
     if (!strcmp(senha_entry,usuario[i].senha))
         return i;
 }
@@ -145,7 +124,7 @@ if (i >= MAX)
 #pragma endregion
 
 #pragma region Funcao Incluir
-
+// Esta funcao tem como objetivo cadastrar os usuarios no banco de dados, como Admin e Clientes
 void IncluirUsuarios(int indiceUsuario,char *nome,long long int cpf,char *email,char *endereco,int numero,char *complemento,char *cidade_estado,long long int telefone,char *senha,int verifcadorUsuario){
     
     // Se verifcadorUsuario == 0 é considerado Usuario se verifcadorUsuario == 1 é considerado Admin
@@ -183,7 +162,7 @@ void IncluirUsuarios(int indiceUsuario,char *nome,long long int cpf,char *email,
 #pragma endregion
 
 #pragma region Funcao Atualizar
-
+// Esta funcao tem como objetivo atualizar os dados antigos pelos dados novos
 void AtualizarDados(int id,char *nome,long long int cpf,char *email,char *endereco,int numero,char *complemento,char *cidade_estado,long long int telefone,char *senha){
     strcpy(cadastrar[id].nome, nome);
     cadastrar[id].cpf = cpf;
@@ -200,7 +179,8 @@ void AtualizarDados(int id,char *nome,long long int cpf,char *email,char *endere
 #pragma endregion
 
 #pragma region Funcao Excluir
-
+// Esta funcao tem como objetivo excluir o cliente 
+// Recebendo um ID
 void ExcluirCliente(int id){
     char nome[60];
     char endereco[60];
@@ -233,7 +213,8 @@ void ExcluirCliente(int id){
 #pragma endregion
 
 #pragma region Funcao Listar Cliente
-
+// Esta funcao tem como objetivo listar todos os cadastros do banco de dados
+// Como clientes e admin's
 void ListarClientes(){
     ListarAdmin();
     for (int i = 1; i < MAX; i++)
@@ -244,6 +225,7 @@ void ListarClientes(){
         
 }
 
+// Esta funcao tem como objetivo listar os admin's cadastrados
 void ListarAdmin(){
     for (int i = 1; i < MAX; i++)
         if (!cadastrarAdmin[i].id == 0)
@@ -255,7 +237,7 @@ void ListarAdmin(){
 #pragma endregion
 
 #pragma region Banco de dados de clientes
-
+// Esta funcao tem como objetivo inserir clientes e admins no banco de dados
 void InsereClientesBancoDeDados(){
     InsereAdmin();
     for (indiceUsuario = 1; indiceUsuario < 6; indiceUsuario++)
@@ -271,44 +253,34 @@ void InsereAdmin(){
 
 #pragma endregion
 
-#pragma region Atualizar Dados
+#pragma region Pagina Atualizar Dados
+// Id -> Id
+// Nome -> Nome
+// Email -> Email
+// Endereco -> Endereco
+// Numero -> Numero
+// Complemento -> Complemento
+// Cidade_Uf -> Cidade_Estado
+// Telefone -> Telefone
+// Senha -> Senha
 
+// Este metodo tem como objetivo exibir o menu e chamar a funcao
+// Atualizar dados que ao receber os dados novos ele substitui
+// Os dados antigos pelos novos no Banco de Dados
 void AtualizarDadosPage(){
+
 //Variaveis Locais
 char *nome[60],*endereco[30],*complemento[20],*email[60],*cidade_uf[20],*senha[32];
 long long int cpf = 0,telefone = 0;
 int id = 0,numero = 0;
 //Fim Variaveis Locais
 
-    printf("---- Pagina de Alteracao De Dados ----\n");
-    printf("--------------------------------------\n");
-    printf("0 - Sair\n");
-    printf("1 - Voltar para o menu\n");
-    printf("2 - Cadastro\n");
-    printf("3 - Alterar\n");
-    scanf("%d",&opcao);
-    printf("--------------------------------------\n");
-    switch (opcao)
-    {
-    case 0:
-      exit(0);
-      break;
-  case 1:
-      main();
-      break;
-  case 2:
-      cadastroCliente();
-      break;
-  case 3:
-      break;
-  default:
-    printf("Favor escolher uma opcao valida");
-      break;
-    }
+    printf("----------- Pagina de Alteracao De Dados ------------\n");
+    MenuOpcoesClientes();
 
     printf("Insira o Id para alterar:");
     scanf("%d",&id);    
-    printf("--------------------------------------\n");
+    printf("-----------------------------------------------------\n");
     printf("Nome: ");
     scanf(" %[^\n]s",&nome);
     printf("CPF: ");
@@ -352,49 +324,34 @@ int id = 0,numero = 0;
 
 #pragma endregion
 
-#pragma region Exclui Cliente
-
+#pragma region Pagina Excluir Cliente
+// Este metodo tem como objetivo exibir o menu e chamar a funcao
+// Excluir cliente que ao receber o ID do usuario ela remove o usuario ID
+// Do banco de Dados
+// Id -> ID
 void ExcluirClientePage(){
+
 //Variaveis Locais
 int id = 0;
 //Fim Variaveis Locais
-    printf("--- Pagina de Exclusao De Clientes ---\n");
-    printf("--------------------------------------\n");
-    printf("0 - Sair\n");
-    printf("1 - Voltar para o menu\n");
-    printf("2 - Cadastro\n");
-    printf("3 - Excluir\n");
-    scanf("%d",&opcao);
-    printf("--------------------------------------\n");
-    switch (opcao)
-    {
-    case 0:
-      exit(0);
-      break;
-  case 1:
-      main();
-      break;
-  case 2:
-      cadastroCliente();
-      break;
-  case 3:
-      break;
-  default:
-    printf("Favor escolher uma opcao valida");
-      break;
-    }
 
-    printf("Insira o Id para ser excluir:");
-    scanf("%d",&id);    
-    printf("--------------------------------------\n");
-    ExcluirCliente(id);
-    main();
+printf("---------- Pagina de Exclusao De Clientes -----------\n");
+MenuOpcoesAdmin();
+
+printf("Insira o Id para ser excluir:");
+scanf("%d",&id);    
+printf("-----------------------------------------------------\n");
+ExcluirCliente(id);
+main();
 }
 
 #pragma endregion
 
-#pragma region Registrar Login Cliente
-
+#pragma region Funcao Registrar Login Cliente
+// Nesta funcao o objetivo é que toda vez que for cadastrado um cliente(usuario)
+// O sistema automaticamente gera o login dele baseado nos dados:
+// Email -> Login
+// Senha -> Senha
 void RegistrarLoginUsuario(){  
     strcpy(usuario[indiceCadastroUsuario].login,cadastrar[indiceUsuario].email);
     strcpy(usuario[indiceCadastroUsuario].senha,cadastrar[indiceUsuario].senha);
@@ -403,8 +360,11 @@ void RegistrarLoginUsuario(){
 
 #pragma endregion
 
-#pragma region Registrar Login Admin
-
+#pragma region Funcao Registrar Login Admin
+// Nesta funcao o objetivo é que toda vez que for cadastrado um admin
+// O sistema automaticamente gera o login dele baseado nos dados:
+// Email -> adminUser
+// Senha -> Senha
 void RegistrarLoginAdmin(){
     for (int i = 1; i < MAX; i++)
         if (!cadastrarAdmin[i].id == 0){
@@ -418,83 +378,61 @@ void RegistrarLoginAdmin(){
 
 #pragma region Pagina Inicial
 
-int dashboard()
+void dashboard()
 {
     //fazer um construtor para toda vez que chamar o dashboard injetar arquivos dentro da struct e listar
     //compra de voo : 1 data e horario voo 2 peso e tamanho 3 forma de pagamento 4 nota 5 devolver id voo Usuario pode cancelar a qualquer momento
     //acompanhar voo: 1 pedir codigo de voo 2 data de saida e previsao de chegada
-    printf("DAshboardddd\n");
-    main();
+    printf("-------------------------------------------------------\n");
+    printf("--------- Pagina Inicial Sistema CTA Airlines ---------\n");
+    MenuOpcoesClientes();
 }
 
 #pragma endregion
 
 #pragma region Pagina Inicial Admin
 
-int dashboardAdmin()
+void dashboardAdmin()
 {
     //fazer um construtor para toda vez que chamar o dashboard injetar arquivos dentro da struct e listar
     //1 listar dados de clientes (compras efetuadas) 2 listar voos em andamento 
-    printf("DAshboardddd de adminnn\n");
-    main();
+    printf("------------------------------------------------------\n");
+    printf("----- Pagina Administrativa Sistema CTA Airlines -----\n");
+    MenuOpcoesAdmin();
 }
 
 #pragma endregion
 
-#pragma region Cadastro Cliente
+#pragma region Funcao Cadastro Cliente
 
-int cadastroCliente()
+void cadastroCliente()
 {
 // Local Variables
 char *nome[60],*endereco[30],*complemento[20],*email[60],*cidade_uf[20],*senha[32];
 long long int cpf = 0,telefone = 0;
 int numero = 0;
 //End Local Variables
-    printf("--- Register Page CTA Systems ---\n");
-    printf("----------------------------------\n");
-    printf("Se deseja cadastrar um administrador efetue o login e cadastre depois de logar\n");
-    printf("0 - Sair\n");
-    printf("1 - Voltar para o menu\n");
-    printf("2 - Login\n");
-    printf("3 - Cadastrar\n");
-    scanf("%d",&opcao);
-    printf("----------------------------------\n");
+    printf("---------- Paginca de Cadastro CTA Systems ----------\n");
+    MenuOpcoesClientes();
 
-  switch (opcao)
-{
-    case 0:
-      exit(0);
-      break;
-  case 1:
-      main();
-      break;
-  case 2:
-      login();
-      break;
-  case 3:
-      break;
-  default:
-    printf("Favor escolher uma opcao valida");
-      break;
-}
-        printf("Nome: ");
-        scanf(" %[^\n]s",&nome);
-        printf("CPF: ");
-        scanf("%lld", &cpf);
-        printf("Email: ");
-        scanf(" %[^\n]s", &email);
-        printf("Endereco: ");
-        scanf(" %[^\n]s", &endereco);
-        printf("Numero: ");
-        scanf("%d", &numero);
-        printf("Complemento: ");
-        scanf(" %[^\n]s", &complemento);
-        printf("Cidade-UF: ");
-        scanf(" %[^\n]s", &cidade_uf);
-        printf("Telefone DD123456789: ");
-        scanf("%lld", &telefone);
-        printf("Senha: ");
-        scanf(" %[^\n]s", &senha);
+    printf("Nome: ");
+    scanf(" %[^\n]s",&nome);
+    printf("CPF: ");
+    scanf("%lld", &cpf);
+    printf("Email: ");
+    scanf(" %[^\n]s", &email);
+    printf("Endereco: ");
+    scanf(" %[^\n]s", &endereco);
+    printf("Numero: ");
+    scanf("%d", &numero);
+    printf("Complemento: ");
+    scanf(" %[^\n]s", &complemento);
+    printf("Cidade-UF: ");
+    scanf(" %[^\n]s", &cidade_uf);
+    printf("Telefone DD123456789: ");
+    scanf("%lld", &telefone);
+    printf("Senha: ");
+    scanf(" %[^\n]s", &senha);
     
     printf("--------------------------------\n");
     printf("Nome: %s,CPF: %lld,E-Mail: %s,Endereco: %s,Numero: %d,Complemento: %s,Cidade-UF: %s,Telefone: %lld,Senha: %s\n",nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha);
@@ -515,69 +453,47 @@ int numero = 0;
         printf("Cadastro efetuado com sucesso!\n");
         main();
     }
-
 }
 
 #pragma endregion
 
-#pragma region Cadastro Admin
+#pragma region Funcao Cadastro Admin
 
-int cadastroAdmin()
+void cadastroAdmin()
 {
 // Local Variables
 char *nome[60],*endereco[30],*complemento[20],*email[60],*cidade_uf[20],*senha[32];
 long long int cpf = 0,telefone = 0;
 int numero = 0,idFuncionario = 0;
 //End Local Variables
-    printf("--- Admin Register Page CTA Systems ---\n");
-    printf("---------------------------------------\n");
-    printf("0 - Sair\n");
-    printf("1 - Voltar para o menu\n");
-    printf("2 - Login\n");
-    printf("3 - Cadastrar\n");
-    scanf("%d",&opcao);
-    printf("---------------------------------------\n");
-
-  switch (opcao)
-{
-    case 0:
-      exit(0);
-      break;
-  case 1:
-      main();
-      break;
-  case 2:
-      login();
-      break;
-  case 3:
-      break;
-  default:
-    printf("Favor escolher uma opcao valida");
-      break;
-}
-        printf("Nome: ");
-        scanf(" %[^\n]s",&nome);
-        printf("CPF: ");
-        scanf("%lld", &cpf);
-        printf("Email: ");
-        scanf(" %[^\n]s", &email);
-        printf("Endereco: ");
-        scanf(" %[^\n]s", &endereco);
-        printf("Numero: ");
-        scanf("%d", &numero);
-        printf("Complemento: ");
-        scanf(" %[^\n]s", &complemento);
-        printf("Cidade-UF: ");
-        scanf(" %[^\n]s", &cidade_uf);
-        printf("Telefone DD123456789: ");
-        scanf("%lld", &telefone);
-        printf("Senha: ");
-        scanf(" %[^\n]s", &senha);
+    printf("-- Pagina de Cadastro de Administrador CTA Systems --\n");
+    MenuOpcoesAdmin();
     
+    //Inicio Questionario
+    printf("Nome: ");
+    scanf(" %[^\n]s",&nome);
+    printf("CPF: ");
+    scanf("%lld", &cpf);
+    printf("Email: ");
+    scanf(" %[^\n]s", &email);
+    printf("Endereco: ");
+    scanf(" %[^\n]s", &endereco);
+    printf("Numero: ");
+    scanf("%d", &numero);
+    printf("Complemento: ");
+    scanf(" %[^\n]s", &complemento);
+    printf("Cidade-UF: ");
+    scanf(" %[^\n]s", &cidade_uf);
+    printf("Telefone DD123456789: ");
+    scanf("%lld", &telefone);
+    printf("Senha: ");
+    scanf(" %[^\n]s", &senha);
+    //FIM Questionario
+    //Inicio Confirmar Dados
     printf("--------------------------------\n");
     printf("Nome: %s,CPF: %lld,E-Mail: %s,Endereco: %s,Numero: %d,Complemento: %s,Cidade-UF: %s,Telefone: %lld,Senha: %s\n",nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha);
     printf("--------------------------------\n");
-    
+    //FIM Confirmar Dados
     opcao = 0;
     printf("Para cancelar tecle: 0\nPara confirmar tecle: 1\n");
     scanf("%d", &opcao);
@@ -593,28 +509,20 @@ int numero = 0,idFuncionario = 0;
         printf("Cadastro efetuado com sucesso!\n");
         main();
     }
-
 }
 
 #pragma endregion
 
-#pragma region Main
-
-int main()
+#pragma region Menu Principal
+// Tem como objetivo mostrar a pagina inicial do sistema CTA
+void MenuPrincipal()
 {
-    printf("---------------------------------\n");
-    printf("Bem-vindo ao sistema CTA Airlines\n");
-    printf("---------------------------------\n");
-    printf("0 - Sair\n");
+    printf("-----------------------------------------------------\n");
+    printf("0 - Fechar o Sistema\n");
     printf("1 - Login\n");
-    printf("2 - Cadastro\n");
-    printf("3 - Insere clientes\n");
-    printf("4 - Lista clientes\n");
-    printf("5 - Atualizar Dados\n");
-    printf("6 - Excluir Clientes\n");
-    printf("7 - Cadastrar Admin\n");
+    printf("2 - Cadastrar-se\n");
     scanf("%d",&opcao);
-    printf("---------------------------------\n");
+    printf("-----------------------------------------------------\n");
 
   switch (opcao)
   {
@@ -626,31 +534,115 @@ int main()
       break;
     case 2:
       cadastroCliente();
-      break;
-    case 3:
-      InsereClientesBancoDeDados();
-      main();
-      break;
-    case 4:
-      ListarClientes();
-      main();
-      break;
-    case 5:
-      AtualizarDadosPage();
-      main();
-      break;
-    case 6:
-      ExcluirClientePage();
-      main();
-      break;
-    case 7:
-      cadastroAdmin();
-      main();
+      PaginaInicial();
       break;
   default:
     printf("Favor escolher uma opcao valida");
       break;
   }
+}
+
+#pragma endregion 
+
+#pragma region Menu Opcoes Clientes
+
+void MenuOpcoesClientes()
+{
+    printf("-----------------------------------------------------\n");
+    printf("0 - Fechar o Sistema\n");
+    printf("1 - Deslogar\n");
+    printf("2 - Atualizar Dados\n");
+    printf("3 - Continuar\n");
+    scanf("%d",&opcao);
+    printf("-----------------------------------------------------\n");
+
+  switch (opcao)
+  {
+    case 0:
+      exit(0);
+      break;
+    case 1:
+      PaginaInicial();
+      break;
+    case 2:
+      AtualizarDadosPage();
+      PaginaInicial();
+      break;
+    case 3:
+      break;
+  default:
+    printf("Favor escolher uma opcao valida");
+      break;
+  }
+}
+
+#pragma endregion 
+
+#pragma region Menu Opcoes Admin
+
+void MenuOpcoesAdmin()
+{
+    printf("-----------------------------------------------------\n");
+    printf("0 - Fechar o Sistema\n");
+    printf("1 - Deslogar\n");
+    printf("2 - Cadastrar Cliente\n");
+    printf("3 - Listar Banco de Dados\n");
+    printf("4 - Atualizar Dados\n");
+    printf("5 - Excluir Cliente\n");
+    printf("6 - Continuar\n");
+    scanf("%d",&opcao);
+    printf("-----------------------------------------------------\n");
+
+  switch (opcao)
+  {
+    case 0:
+      exit(0);
+      break;
+    case 1:
+      PaginaInicial();
+      break;
+    case 2:
+      cadastroCliente();
+      break;
+    case 3:
+      ListarClientes();
+      PaginaInicial();
+      break;
+    case 4:
+      AtualizarDadosPage();
+      PaginaInicial();
+      break;
+    case 5:
+      ExcluirClientePage();
+      PaginaInicial();
+      break;
+    case 6:
+      break;
+  default:
+    printf("Favor escolher uma opcao valida");
+      break;
+  }
+}
+
+#pragma endregion
+
+#pragma region Pagina Inicial
+
+void PaginaInicial()
+{
+printf("-----------------------------------------------------\n");
+printf("--------- Bem-Vindo ao Sistema CTA Airlines ---------\n");
+MenuPrincipal();
+}
+
+#pragma endregion
+
+#pragma region Main
+
+void main()
+{
+InsereClientesBancoDeDados();
+PaginaInicial();
 }
 
 #pragma endregion
