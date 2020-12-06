@@ -77,7 +77,7 @@ int login()
     }
 
     char *user_entry[60],*senha_entry[32];
-	int tentativas = 0;
+	int tentativas = 0,responseLogin = 0,responseSenha = 0;
     do {
         printf("Login: ");
         scanf("%s", &user_entry);
@@ -85,8 +85,8 @@ int login()
         scanf("%s", &senha_entry);
         printf("----------------------------------\n");
         
-        int responseLogin = ValidarLogin(user_entry);
-        int responseSenha = ValidarSenha(senha_entry);
+        responseLogin = ValidarLogin(user_entry);
+        responseSenha = ValidarSenha(senha_entry);
 
         //Processo de login
         if (!strcmp(user_entry, usuario[responseLogin].login) && !strcmp(senha_entry, usuario[responseSenha].senha)) {
@@ -99,7 +99,6 @@ int login()
         //Fim processo de login
 
         //Validar Login
-        
         if (responseLogin == 0 || responseSenha == 0)
         {
             printf("Usuario ou Senha Invalidos!\n");
@@ -120,8 +119,9 @@ int i;
 for (i = 1; i < MAX; i++){
     if (!strcmp(user_entry,usuario[i].login))
         return i;
-    if (!strcmp(user_entry,usuario[i].adminUser))
+    else if (!strcmp(user_entry,usuario[i].adminUser))
         return i;
+    
 }
 if (i >= MAX)
     return 0;
@@ -133,9 +133,7 @@ if (i >= MAX)
 
 int ValidarSenha(char *senha_entry){
 int i;
-for (i = 1; i < MAX; i++){
-    if (!strcmp(senha_entry,usuario[i].senha))
-        return i;
+for (i = 1; i < 15; i++){
     if (!strcmp(senha_entry,usuario[i].senha))
         return i;
 }
@@ -259,15 +257,10 @@ void ListarAdmin(){
 #pragma region Banco de dados de clientes
 
 void InsereClientesBancoDeDados(){
-    // InsereAdmin();
-    // for (indiceUsuario = 1; indiceUsuario < 6; indiceUsuario++)
-        IncluirUsuarios(indiceUsuario,"teste",12312312312,"teste@teste.com","rua teste",indiceUsuario,"Casa","CWB-PR",41123451234,"senha",0);  
-        IncluirUsuarios(indiceUsuario,"teste1",12312312312,"teste1@teste.com","rua teste1",indiceUsuario,"Casa1","CWB-PRs",41123451234,"senha1",0);  
-        IncluirUsuarios(indiceUsuario,"teste2",12312312312,"teste2@teste.com","rua teste2",indiceUsuario,"Casa2","CWB-PRd",41123451234,"senha2",0);  
-        IncluirUsuarios(indiceUsuario,"teste3",12312312312,"teste3@teste.com","rua teste3",indiceUsuario,"Casa3","CWB-PRx",41123451234,"senha3",0); 
-        IncluirUsuarios(indiceUsuario,"testeAdmin",98798798712,"admin@teste.com","rua admin",indiceAdmin,"Sobrado","Matinhos-PR",41987651234,"senhaAdmin",1);
-        IncluirUsuarios(indiceUsuario,"testeAdmin1",98798798712,"admin1@teste.com","rua admin1",indiceAdmin,"Sobrado1","Matinhos-PRs",41987651234,"senhaAdmin1",1); 
- 
+    InsereAdmin();
+    for (indiceUsuario = 1; indiceUsuario < 6; indiceUsuario++)
+        IncluirUsuarios(indiceUsuario,"teste",12312312312,"teste@teste.com","rua teste",indiceUsuario,"Casa","CWB-PR",41123451234,"senha",0);
+    
     RegistrarLoginAdmin();
 }
 
@@ -430,7 +423,8 @@ int dashboard()
     //fazer um construtor para toda vez que chamar o dashboard injetar arquivos dentro da struct e listar
     //compra de voo : 1 data e horario voo 2 peso e tamanho 3 forma de pagamento 4 nota 5 devolver id voo Usuario pode cancelar a qualquer momento
     //acompanhar voo: 1 pedir codigo de voo 2 data de saida e previsao de chegada
-    printf("DAshboardddd");
+    printf("DAshboardddd\n");
+    main();
 }
 
 #pragma endregion
@@ -441,7 +435,8 @@ int dashboardAdmin()
 {
     //fazer um construtor para toda vez que chamar o dashboard injetar arquivos dentro da struct e listar
     //1 listar dados de clientes (compras efetuadas) 2 listar voos em andamento 
-    printf("DAshboardddd de adminnn");
+    printf("DAshboardddd de adminnn\n");
+    main();
 }
 
 #pragma endregion
@@ -607,7 +602,7 @@ int numero = 0,idFuncionario = 0;
 
 int main()
 {
-
+    printf("---------------------------------\n");
     printf("Bem-vindo ao sistema CTA Airlines\n");
     printf("---------------------------------\n");
     printf("0 - Sair\n");
