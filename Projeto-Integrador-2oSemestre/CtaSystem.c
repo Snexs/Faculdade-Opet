@@ -140,7 +140,6 @@ void IncluirUsuarios(int indiceUsuario,char *nome,long long int cpf,char *email,
         strcpy(cadastrarAdmin[indiceUsuario].cidade_estado, cidade_estado);
         cadastrarAdmin[indiceUsuario].telefone = telefone;
         strcpy(cadastrarAdmin[indiceUsuario].senha, senha);
-        printf("Admin cadastrado com sucesso!\n");
         indiceAdmin++;
     }else{
         cadastrar[indiceUsuario].id = indiceUsuario;
@@ -153,7 +152,6 @@ void IncluirUsuarios(int indiceUsuario,char *nome,long long int cpf,char *email,
         strcpy(cadastrar[indiceUsuario].cidade_estado, cidade_estado);
         cadastrar[indiceUsuario].telefone = telefone;
         strcpy(cadastrar[indiceUsuario].senha, senha);
-        printf("Cliente cadastrado com sucesso!\n");
         RegistrarLoginUsuario();
         indiceUsuario++;
     }    
@@ -476,12 +474,12 @@ void listaDeVoos()
 
 void comprarVoo()
 {
-    char destino[70], horario[5], data[11];
+    char destino[80], horario[10], data[20];
 
     printf("Destino: \n");
     printf("Favor inserir o destino por completo\n");
     printf("Exemplo: 160 - Rio de Janeiro-RJ -> Natal-RN\n");
-    scanf("%s", &destino);
+    scanf(" %[^\n]s", &destino);
 
     fflush(stdin);
 
@@ -491,9 +489,11 @@ void comprarVoo()
     printf("Data de partida: \n");
     gets(data);
 
+    printf("--------------------------------------------------------\n");
     printf("\nDestino: %s \n", destino);
     printf("Horario de partida: %s\n", horario);
-    printf("Data de partida: "); puts(data);
+    printf("Data de partida: %s\n",data);
+    printf("--------------------------------------------------------\n");
 }
 
 #pragma endregion
@@ -618,7 +618,7 @@ int numero = 0;
     {
         IncluirUsuarios(indiceUsuario,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha,0);
         RegistrarLoginUsuario();
-        printf("Cadastro efetuado com sucesso!\n");
+        printf("Cadastro realizado com sucesso!\n");
         PaginaInicial();
     }
 }
@@ -674,7 +674,7 @@ int numero = 0,idFuncionario = 0;
     {
         IncluirUsuarios(indiceUsuario,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha,1);
         RegistrarLoginAdmin();
-        printf("Cadastro efetuado com sucesso!\n");
+        printf("Cadastro relizado com sucesso!\n");
         PaginaInicial();
     }
 }
