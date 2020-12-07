@@ -13,7 +13,7 @@ typedef struct SystemLogin{
 
 typedef struct CadastroClientes{
     int id;
-    char nome[60];
+    char nome[80];
 	long long int cpf;
     char email[60];
     char endereco[30];
@@ -84,7 +84,7 @@ void login()
         //Fim validar login
     } while (tentativas < 3);
     printf("Numero maximo de tentativas alcancado!\n");
-    main();
+    PaginaInicial();
 }
 
 #pragma endregion
@@ -340,7 +340,7 @@ printf("Insira o Id para ser excluir:");
 scanf("%d",&id);    
 printf("-----------------------------------------------------\n");
 ExcluirCliente(id);
-main();
+dashboardAdmin();
 }
 
 #pragma endregion
@@ -418,7 +418,6 @@ void dashboard()
 void listaDeVoos()
 {
     int opcao;
-    printf("--------------------------------------------------------\n");
     printf("Voos Ativos:\n");
     printf("001 - Curitiba-PR -> Sao Paulo-SP\n");
     printf("121 - Rio de Janeiro-RJ -> Natal-RN\n");
@@ -436,35 +435,46 @@ void listaDeVoos()
     switch(opcao)
     {
     case 001:
-        printf("\nHorario saida:05:10\nHorario chegada:06:00");
-        return 0;
+        printf("001 - Curitiba-PR -> Sao Paulo-SP");
+        printf("\nHorario saida:05:10\nHorario chegada:06:00\n");
+        dashboard();
     case 125:
-        printf("\nHorario saida:10:00\nHorario chegada:15:15");
-        return 0;
+        printf("125 - Sao Paulo-SP -> Buenos Aires-AR");
+        printf("\nHorario saida:10:00\nHorario chegada:15:15\n");
+        dashboard();
     case 323:
-        printf("\nHorario saida:08:30\nHorario chegada:10:20");
-        return 0;
+        printf("323 - Curitiba-PR -> Foz do Iguacu-PR");
+        printf("\nHorario saida:08:30\nHorario chegada:10:20\n");
+        dashboard();
     case 654:
-        printf("\nHorario saida:11:30\nHorario chegada:16:00");
-        return 0;
+        printf("654 - Sao Paulo-SP -> Assuncao-PY");
+        printf("\nHorario saida:11:30\nHorario chegada:16:00\n");
+        dashboard();
     case 121:
-        printf("\nHorario saida:14:30\nHorario chegada:17:00");
-        return 0;
+        printf("121 - Rio de Janeiro-RJ -> Natal-RN");
+        printf("\nHorario saida:14:30\nHorario chegada:17:00\n");
+        dashboard();
     case 996:
-        printf("\nHorario saida:18:20\nHorario chegada:21:50");
-        return 0;
+        printf("996 - Santiago-CL -> Sao Paulo-SP");
+        printf("\nHorario saida:18:20\nHorario chegada:21:50\n");
+        dashboard();
     case 586:
-        printf("\nHorario saida:16:10\nHorario chegada:23:40");
-        return 0;
+        printf("586 - Nova York-EUA -> Rio de Janeiro-RJ");
+        printf("\nHorario saida:16:10\nHorario chegada:23:40\n");
+        dashboard();
     case 412:
-        printf("\nHorario saida:17:30\nHorario chegada:22:50");
-        return 0;
+        printf("412 - Amapa-AP -> Porto Alegre-RS");
+        printf("\nHorario saida:17:30\nHorario chegada:22:50\n");
+        dashboard();
     case 881:
-        printf("\nHorario saida:09:30\nHorario chegada:16:00");
-        return 0;
+        printf("881 - Brasilia-DF -> Curitiba-PR");
+        printf("\nHorario saida:09:30\nHorario chegada:16:00\n");
+        dashboard();
     default:
         printf("Favor escolher um voo valido!!\n");
+        listaDeVoos();
     }
+
 }
 
 
@@ -490,7 +500,7 @@ void comprarVoo()
     gets(data);
 
     printf("--------------------------------------------------------\n");
-    printf("\nDestino: %s \n", destino);
+    printf("Destino: %s \n", destino);
     printf("Horario de partida: %s\n", horario);
     printf("Data de partida: %s\n",data);
     printf("--------------------------------------------------------\n");
@@ -520,7 +530,7 @@ void pagamento()
     switch (opcao){
         case 1:
             printf("Compra realizada com sucesso!\n");
-            PaginaInicial();
+            dashboard();
             break;
 
         case 0:
@@ -536,7 +546,7 @@ void pagamento()
 
 void comprasRealizadas()
 {
-    char nomecompra[500]="Cliente Talita Alves, Compra voo 111\n Cliente Ana Nunes: Compra voo 345\n Cliente Jose Farias: Compra voo 976\n Cliente Fernando Morais: Compra voo 342";
+    char nomecompra[500]="Cliente Talita Alves, Compra voo 111\n Cliente Ana Nunes: Compra voo 345\n Cliente Jose Farias: Compra voo 976\n Cliente Fernando Morais: Compra voo 342\n";
 
     printf("Compras efetuadas: %s",nomecompra);
 }
@@ -547,7 +557,7 @@ void comprasRealizadas()
 
 void acompanharVoo()
 {
-    char nvoo[200]="Em andamento: voo 141\nEm andamento: voo 111\nEm andamento: voo 345\nEm andamento: voo 189\nEm andamento: voo 323";
+    char nvoo[200]="Em andamento: voo 141\nEm andamento: voo 111\nEm andamento: voo 345\nEm andamento: voo 189\nEm andamento: voo 323\n";
 
     printf("Voos: %s",nvoo);
 }
@@ -566,7 +576,6 @@ void dashboardAdmin()
     acompanharVoo();
     printf("------------------------------------------------------\n");
     listaDeVoos();
-    printf("------------------------------------------------------\n");
 }
 
 #pragma endregion
@@ -619,7 +628,7 @@ int numero = 0;
         IncluirUsuarios(indiceUsuario,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha,0);
         RegistrarLoginUsuario();
         printf("Cadastro realizado com sucesso!\n");
-        PaginaInicial();
+        dashboard();
     }
 }
 
@@ -675,7 +684,7 @@ int numero = 0,idFuncionario = 0;
         IncluirUsuarios(indiceUsuario,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha,1);
         RegistrarLoginAdmin();
         printf("Cadastro relizado com sucesso!\n");
-        PaginaInicial();
+        dashboardAdmin();
     }
 }
 
@@ -702,7 +711,6 @@ void MenuPrincipal()
       break;
     case 2:
       cadastroCliente();
-      PaginaInicial();
       break;
   default:
     printf("Favor escolher uma opcao valida");
@@ -756,10 +764,11 @@ void MenuOpcoesAdmin()
     printf("0 - Fechar o Sistema\n");
     printf("1 - Deslogar\n");
     printf("2 - Cadastrar Cliente\n");
-    printf("3 - Listar Banco de Dados\n");
-    printf("4 - Atualizar Dados\n");
-    printf("5 - Excluir Cliente\n");
-    printf("6 - Continuar\n");
+    printf("3 - Cadastrar Admin\n");
+    printf("4 - Listar Banco de Dados\n");
+    printf("5 - Atualizar Dados\n");
+    printf("6 - Excluir Cliente\n");
+    printf("7 - Continuar\n");
     scanf("%d",&opcao);
     printf("-----------------------------------------------------\n");
 
@@ -773,20 +782,20 @@ void MenuOpcoesAdmin()
       break;
     case 2:
       cadastroCliente();
-      break;
     case 3:
-      ListarClientes();
-      PaginaInicial();
+      cadastroAdmin();
       break;
     case 4:
-      AtualizarDadosPage();
-      PaginaInicial();
+      ListarClientes();
+      dashboardAdmin();
       break;
     case 5:
-      ExcluirClientePage();
-      PaginaInicial();
+      AtualizarDadosPage();
       break;
     case 6:
+      ExcluirClientePage();
+      break;
+    case 7:
       break;
   default:
     printf("Favor escolher uma opcao valida");
