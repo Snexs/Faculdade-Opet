@@ -376,16 +376,180 @@ void RegistrarLoginAdmin(){
 
 #pragma endregion
 
+#pragma region Pagina Compra de Voo
+
+void compraVooPage(){
+
+printf("--------- Pagina De Compra De Voo CTA Airlines ---------\n");
+MenuOpcoesClientes();
+
+printf("Voos Disponiveis:\n");
+printf("010 - Curitiba-PR -> Sao Paulo-SP\n");
+printf("160 - Rio de Janeiro-RJ -> Manaus-AM\n");
+printf("190 - Sao Paulo-SP -> Campo Grande-MS\n");
+printf("255 - Curitiba-PR -> Brasilia-DF\n");
+printf("327 - Sao Paulo -> Porto Alegre-RS\n");
+printf("476 - Rio Branco-AC -> Rio de Janeiro-RJ\n");
+printf("578 - Porto Alegre-RS -> Assuncao-PY\n");
+printf("667 - Florianopolis-SC -> Goiania-GO\n");
+printf("777 - Sao Paulo-SP -> Santiago-CL\n");
+printf("--------------------------------------------------------\n");
+comprarVoo();
+pagamento();
+
+}
+
+#pragma endregion
+
 #pragma region Pagina Inicial
 
 void dashboard()
 {
-    //fazer um construtor para toda vez que chamar o dashboard injetar arquivos dentro da struct e listar
-    //compra de voo : 1 data e horario voo 2 peso e tamanho 3 forma de pagamento 4 nota 5 devolver id voo Usuario pode cancelar a qualquer momento
-    //acompanhar voo: 1 pedir codigo de voo 2 data de saida e previsao de chegada
     printf("-------------------------------------------------------\n");
     printf("--------- Pagina Inicial Sistema CTA Airlines ---------\n");
     MenuOpcoesClientes();
+    listaDeVoos();
+    printf("------------------------------------------------------\n");
+
+}
+
+#pragma endregion
+
+#pragma region Funcao Lista de Voos
+
+void listaDeVoos()
+{
+    int opcao;
+    printf("--------------------------------------------------------\n");
+    printf("Voos Ativos:\n");
+    printf("001 - Curitiba-PR -> Sao Paulo-SP\n");
+    printf("121 - Rio de Janeiro-RJ -> Natal-RN\n");
+    printf("125 - Sao Paulo-SP -> Buenos Aires-AR\n");
+    printf("323 - Curitiba-PR -> Foz do Iguacu-PR\n");
+    printf("412 - Amapa-AP -> Porto Alegre-RS\n");
+    printf("586 - Nova York-EUA -> Rio de Janeiro-RJ\n");
+    printf("654 - Sao Paulo-SP -> Assuncao-PY\n");
+    printf("881 - Brasilia-DF -> Curitiba-PR\n");
+    printf("996 - Santiago-CL -> Sao Paulo-SP\n");
+    printf("Digite seu codigo de voo: ");
+    scanf("%d", &opcao);
+    printf("\n--------------------------------------------------------\n");
+
+    switch(opcao)
+    {
+    case 001:
+        printf("\nHorario saida:05:10\nHorario chegada:06:00");
+        return 0;
+    case 125:
+        printf("\nHorario saida:10:00\nHorario chegada:15:15");
+        return 0;
+    case 323:
+        printf("\nHorario saida:08:30\nHorario chegada:10:20");
+        return 0;
+    case 654:
+        printf("\nHorario saida:11:30\nHorario chegada:16:00");
+        return 0;
+    case 121:
+        printf("\nHorario saida:14:30\nHorario chegada:17:00");
+        return 0;
+    case 996:
+        printf("\nHorario saida:18:20\nHorario chegada:21:50");
+        return 0;
+    case 586:
+        printf("\nHorario saida:16:10\nHorario chegada:23:40");
+        return 0;
+    case 412:
+        printf("\nHorario saida:17:30\nHorario chegada:22:50");
+        return 0;
+    case 881:
+        printf("\nHorario saida:09:30\nHorario chegada:16:00");
+        return 0;
+    default:
+        printf("Favor escolher um voo valido!!\n");
+    }
+}
+
+
+#pragma endregion
+
+#pragma region Funcao Compra de Voos
+
+void comprarVoo()
+{
+    char destino[70], horario[5], data[11];
+
+    printf("Destino: \n");
+    printf("Favor inserir o destino por completo\n");
+    printf("Exemplo: 160 - Rio de Janeiro-RJ -> Natal-RN\n");
+    scanf("%s", &destino);
+
+    fflush(stdin);
+
+    printf("Horario de partida: \n");
+    gets(horario);
+
+    printf("Data de partida: \n");
+    gets(data);
+
+    printf("\nDestino: %s \n", destino);
+    printf("Horario de partida: %s\n", horario);
+    printf("Data de partida: "); puts(data);
+}
+
+#pragma endregion
+
+#pragma region Funcao Pagamento
+
+void pagamento()
+{
+    char numeroc[32],datav[5],cvv[3];
+    int opcao;
+
+    printf("Digite o numero do cartao: \n");
+    gets(&numeroc);
+
+    printf("Digite a data de validade: \n");
+    gets(datav);
+
+    printf("Digite o cvv: \n");
+    scanf("%d", &cvv);
+
+    printf("Digite 1 para confirmar e 0 para cancelar: ");
+    scanf("%d", &opcao);
+
+    switch (opcao){
+        case 1:
+            printf("Compra realizada com sucesso!\n");
+            PaginaInicial();
+            break;
+
+        case 0:
+            exit(0);
+            break;
+    }
+}
+
+
+#pragma endregion
+
+#pragma region Funcao Compras Realizadas
+
+void comprasRealizadas()
+{
+    char nomecompra[500]="Cliente Talita Alves, Compra voo 111\n Cliente Ana Nunes: Compra voo 345\n Cliente Jose Farias: Compra voo 976\n Cliente Fernando Morais: Compra voo 342";
+
+    printf("Compras efetuadas: %s",nomecompra);
+}
+
+#pragma endregion
+
+#pragma region Funcao Acompanhar Voos
+
+void acompanharVoo()
+{
+    char nvoo[200]="Em andamento: voo 141\nEm andamento: voo 111\nEm andamento: voo 345\nEm andamento: voo 189\nEm andamento: voo 323";
+
+    printf("Voos: %s",nvoo);
 }
 
 #pragma endregion
@@ -394,11 +558,15 @@ void dashboard()
 
 void dashboardAdmin()
 {
-    //fazer um construtor para toda vez que chamar o dashboard injetar arquivos dentro da struct e listar
-    //1 listar dados de clientes (compras efetuadas) 2 listar voos em andamento 
     printf("------------------------------------------------------\n");
     printf("----- Pagina Administrativa Sistema CTA Airlines -----\n");
     MenuOpcoesAdmin();
+    comprasRealizadas();
+    printf("------------------------------------------------------\n");
+    acompanharVoo();
+    printf("------------------------------------------------------\n");
+    listaDeVoos();
+    printf("------------------------------------------------------\n");
 }
 
 #pragma endregion
@@ -451,7 +619,7 @@ int numero = 0;
         IncluirUsuarios(indiceUsuario,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha,0);
         RegistrarLoginUsuario();
         printf("Cadastro efetuado com sucesso!\n");
-        main();
+        PaginaInicial();
     }
 }
 
@@ -507,7 +675,7 @@ int numero = 0,idFuncionario = 0;
         IncluirUsuarios(indiceUsuario,nome,cpf,email,endereco,numero,complemento,cidade_uf,telefone,senha,1);
         RegistrarLoginAdmin();
         printf("Cadastro efetuado com sucesso!\n");
-        main();
+        PaginaInicial();
     }
 }
 
@@ -552,7 +720,8 @@ void MenuOpcoesClientes()
     printf("0 - Fechar o Sistema\n");
     printf("1 - Deslogar\n");
     printf("2 - Atualizar Dados\n");
-    printf("3 - Continuar\n");
+    printf("3 - Comprar Voo\n");
+    printf("4 - Continuar\n");
     scanf("%d",&opcao);
     printf("-----------------------------------------------------\n");
 
@@ -566,9 +735,10 @@ void MenuOpcoesClientes()
       break;
     case 2:
       AtualizarDadosPage();
-      PaginaInicial();
       break;
     case 3:
+      compraVooPage();
+    case 4:
       break;
   default:
     printf("Favor escolher uma opcao valida");
